@@ -18,7 +18,7 @@ public class VehicleController {
     private VehicleRepository vehicleRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getVehicle(@PathVariable Long id) {
+    public ResponseEntity<String> getVehicleStatus(@PathVariable Long id) {
         Optional<Vehicle> vehicleOpt = vehicleRepository.findById(id);
 
         if (vehicleOpt.isEmpty()) {
