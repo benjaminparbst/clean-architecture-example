@@ -1,4 +1,4 @@
-package com.netcompany.guestlecture.softwaremaintenance.domain;
+package com.netcompany.guestlecture.softwaremaintenance.data.jpa;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
