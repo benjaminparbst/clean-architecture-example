@@ -1,8 +1,7 @@
 package com.netcompany.guestlecture.softwaremaintenance.controller;
 
-import com.netcompany.guestlecture.softwaremaintenance.domain.Vehicle;
-import com.netcompany.guestlecture.softwaremaintenance.repository.VehicleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.netcompany.guestlecture.softwaremaintenance.domain.VehicleEntity;
+import com.netcompany.guestlecture.softwaremaintenance.usecase.GetVehicleUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,24 +13,22 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/vehicles")
 public class VehicleController {
-    private final VehicleRepository vehicleRepository;
+    private final GetVehicleUseCase getVehicleUseCase;
 
-    public VehicleController(VehicleRepository vehicleRepository) {
-        this.vehicleRepository = vehicleRepository;
+    public VehicleController(GetVehicleUseCase getVehicleUseCase) {
+        this.getVehicleUseCase = getVehicleUseCase;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<String> getVehicleStatus(@PathVariable Long id) {
-        Optional<Vehicle> vehicleOpt = vehicleRepository.findById(id);
+        Optional<VehicleEntity> vehicle = getVehicleUseCase.process(id);
 
-        if (vehicleOpt.isEmpty()) {
+        if (vehicle.isEmpty()) {
             return ResponseEntity.badRequest().body("Vehicle not found with ID: " + id);
         }
 
-        Vehicle vehicle = vehicleOpt.get();
-
         // Business logic mixed with data access
-        if ("EXPIRED".equals(vehicle.getRegistrationStatus())) {
+        if ("EXPIRED".equals(vehicle.get().getStatus())) {
             return ResponseEntity.ok("Vehicle is not registered.");
         }
 
